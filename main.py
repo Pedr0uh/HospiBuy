@@ -1,15 +1,6 @@
-import mysql.connector
+from conexao import conn, cursor
+
 import time
-
-conn = mysql.connector.connect(
-    host="shinkansen.proxy.rlwy.net", # temos que aprender como esconder host e senha
-    user="root",
-    password="eSGzRtPwShQdjLoqAqsjUCpAIzHqPLRX",
-    database="HospiBuy",
-    port="18428"
-)
-
-cursor = conn.cursor(dictionary=True)
 
 login = ""  # variavel login vazia
 senha = ""  # variavel senha vazia
@@ -81,101 +72,7 @@ def inicio():
                 print("Erro! Opção inválida!")
 
 
-def criarLogin():
 
-    i = 0    
-
-    while i == 0:
-        
-        cnes = pedir_input("\nInsira o CNES do Hospital (sem caracteres) Ou digite 0 para voltar para o menu: ")
-        if cnes is None:
-            return
-        
-        queryVerific = "SELECT * FROM hospitais WHERE CNES = %s"
-        cursor.execute(queryVerific, (cnes,))
-        
-        resultado = cursor.fetchone()
-        
-        if resultado:
-            
-            print("\n-- Hospital já cadastrado! --\n")
-            inicio()
-        else:
-        
-            cnpj = pedir_input("Insira o CNPJ do Hospital (sem caracteres) Ou digite 0 para voltar para o menu: : ")
-            if cnpj is None:
-                return
-            
-            nomeHospital = pedir_input("Insira o nome do Hospital Ou digite 0 para voltar para o menu: : ")
-            if nomeHospital is None:
-                return
-            
-            telefone = pedir_input("Insira um telefone de contato Ou digite 0 para voltar para o menu: : ")
-            if telefone is None:
-                return
-            
-            email = pedir_input("Insira um email principal Ou digite 0 para voltar para o menu: : ")
-            if email is None:
-                return
-            
-            cpfADM = pedir_input("Insira o CPF do administrador Ou digite 0 para voltar para o menu: : ")
-            if cpfADM is None:
-                return
-            
-            nomeADM = pedir_input("Insira o nome do administrador Ou digite 0 para voltar para o menu: : ")
-            if nomeADM is None:
-                return
-            
-            senha = pedir_input("Crie uma senha para o login do adminstrador Ou digite 0 para voltar para o menu: : ")
-            if senha is None:
-                return
-            
-            plano = pedir_input("""
-        -- Qual plano quer assinar? -- 
-        
-            1 - Plano 1    
-            2 - Plano 2
-            3 - Plano 3
-            0 - voltar para o menu: 
-            
-            """)
-            if plano is None:
-                return
-        
-            while plano not in ["1", "2", "3", "0"]:
-                print(r"""
-        Número digitado incorreto, tente novamente:
-        
-        -- Qual plano quer assinar? -- 
-        
-            1 - Plano 1    
-            2 - Plano 2
-            3 - Plano 3 
-            """)
-                
-                plano = input("Escolha a opção: ")
-        
-            query = "INSERT INTO hospitais (CNES, CNPJ, nome, telefone, email, cpfADM, nomeADM, senha, plano) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            valores = cnes, cnpj, nomeHospital, telefone, email, cpfADM, nomeADM, senha, plano
-            
-            queryLogin = "INSERT INTO usuarios (CPF, nome, senha, cargo) VALUES(%s, %s, %s, 'ADM')"
-            valoresLogin = cpfADM, nomeADM, senha
-        
-            cursor.execute(query, valores)
-            
-            cursor.execute(queryLogin, valoresLogin)
-        
-            conn.commit()
-            
-            print("\nSalvando informações...")
-            
-            time.sleep(20)
-        
-            print("""
-        -------------------------------
-        Cadastro realizado com sucesso!
-        -------------------------------
-        """)
 
 
 def fazerLogin():
@@ -280,12 +177,7 @@ def sair():
     sys.exit()
 
 
-def pedir_input(texto): # função para validar input igual a zero e retorna para menu inicial
-    valor = input(texto)
-    if valor == "0":
-        print("\nVoltando a o Menu Inicial...\n")
-        return None
-    return valor
+
 
 if __name__ == "__main__":
     main()
