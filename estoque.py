@@ -1,3 +1,4 @@
+
 def erro():
     
     print("\nmuitas tentativas invalidas\n")
@@ -5,8 +6,9 @@ def erro():
 
 def estoque():
     contador = 0
-    
-    while True : 
+    i = 0
+
+    while i == 0 : 
         
         if contador >= 5:
             erro()
@@ -17,7 +19,8 @@ def estoque():
         print ('1.Cadastrar item')
         print ('2.Procurar no estoque')
         print ('3.Remover item')
-        print ('4.Buscar item\n')
+        print ('4.Buscar item')
+        print ("5.Voltar para o menu\n")
         opcao = int(input('Selecione uma opção :'))
     
         if opcao == 1:
@@ -44,8 +47,13 @@ def estoque():
             nome3 = str(input('Escreva o nome do item :' ))
             ide1 = int(input('Digite o id do item :'))
             
+        elif opcao == 5:
+            print("Voltando para o menu...")
+            i = 1
+            return
+            
+    
         else:
             print ('\nOpção nao encontrada!')
             contador += 1
 
-print('\nObrigado por usar o sistema de estoque HOSPYBUY!\n')

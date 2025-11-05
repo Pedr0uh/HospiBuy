@@ -1,13 +1,11 @@
 from conexao import conn, cursor
-
 import time
+from fazerLogin import fazerLogin
+from criarLogin import criarLogin
+import estoque, compras
 
-login = ""  # variavel login vazia
-senha = ""  # variavel senha vazia
-nome_usuario = ""
-cargo = ""
-tentativa = 0  # contador global para tentativas
-
+nome_usuario = None
+cargo = None
 
 def main():
 
@@ -25,27 +23,6 @@ def main():
 
 def inicio():
 
-    """
-    cpf_teste = "12345678900"
-    nome_teste = "Pedro Teste"
-    num_acess_teste = 0
-    senha_teste = "1234"
-
-    query = "INSERT INTO usuarios (CPF, nome, num_acesso, senha) VALUES (%s, %s, %s, %s)"
-    valores = cpf_teste, nome_teste, num_acess_teste, senha_teste
-
-    cursor.execute(query, valores) = digitar valores para query do SQL
-
-    conn.commit() = para salvar no banco de dados
-
-    cursor.execute("SELECT * FROM usuarios;") = query para mostrar os dados da tabela
-    dadosUsuarios = cursor.fetchall() = guardei o comando fetchall em uma tabela, que mostra os dados da query
-    (todas as linhas, fetchone para uma linha só)
-
-    print(dadosUsuarios) dei print para mostrar o valor da variavel que é o fetchall
-
-    """
-
     while True:  # loop para manter o menu ativo
         print(r"""
 ----------------------------------------------
@@ -61,57 +38,37 @@ def inicio():
         escolha = input("Digite a opção: ")
         match escolha: # match para "escolha e caso" ligado a variavel escolha
             case "1": # caso a variavel seja 1
-                fazerLogin()
+                usuario = fazerLogin()  
+                if usuario:
+                    global nome_usuario, cargo
+                    nome_usuario = usuario["nome"]
+                    cargo = usuario["cargo"]
+                    home()
+                else:
+                    print("falha no login ou cancelado")
             case "2": # caso a variavel seja 2
-                criarLogin()
+                sucesso = criarLogin()
+                if sucesso:
+                    print("""
+-------------------------------
+Cadastro realizado com sucesso!
+-------------------------------
+""")
             case "3": # caso a variavel seja 3
                 sair()
-            case "4": # caso 4 vai pra home
-                home()
             case _: # caso a variavel não seja nenhuma das opções
                 print("Erro! Opção inválida!")
 
 
 
-
-
-def fazerLogin():
-    global tentativa, nome_usuario, cargo
-    
-    while tentativa < 5:
-        entradaLogin = input("Digite seu CPF: ")
-        entradaSenha = input("Digite sua senha: ")
-
-        query = "SELECT nome, cargo FROM usuarios WHERE CPF = %s AND senha = %s"
-        valores = entradaLogin, entradaSenha
-        
-        cursor.execute(query, valores)
-        resultado = cursor.fetchone()
-
-        if resultado:
-            
-            nome_usuario = resultado['nome']
-            cargo = resultado['cargo']
-            
-            print(f"""\n
-------------------------------------      
-        Bem vindo {nome_usuario}!
-------------------------------------    
-                  """)
-            
-            home()
-            
-            return  # sai da função
-        else:
-            tentativa += 1
-            print(f"Usuário ou senha incorretos. Tentativa {tentativa}/5\n")
-
-    print("Número de tentativas excedido! Voltando ao menu.\n")
-    tentativa = 0  # reseta para poder tentar de novo
-
-
 def home():
-    print(r"""
+
+    global nome_usuario, cargo    
+
+    while True:
+        print(f"\nBem vindo {nome_usuario}! Cargo: {cargo}\n")
+
+        print(r"""
 -- O que deseja fazer hoje? -- 
 
     1 - Gerenciar Estoque    
@@ -119,30 +76,35 @@ def home():
     3 - Descarte de Itens
     4 - Gerenciar Usuários
     5 - Sair 
-    """)
+        """)
 
-    opcao = input("Escolha a opção: ")
+        opcao = input("Escolha a opção: ")
 
-    if opcao == "4":
-        if cargo != "ADM":
-            print("Acesso negado, apenas Adminstradores podem acessar. Entre em contato com o adminstrador da plataforma")
-            home()
-            return
+        if opcao == "4":
+            if cargo != "ADM":
+                print("Acesso negado, apenas Adminstradores podem acessar. Entre em contato com o adminstrador da plataforma")
+                home()
 
-    while True:
         match opcao:
             case "1":
-                estoque()
+                estoque.estoque()
+                continue
             case "2":
-                compras()
+                compras.menu()
+                continue
             case "3":
                 descarte()
+                continue
             case "4":
                 gerenciarUsuarios()
+                continue
             case "5":
                 sair()
+                break
+                return
             case _:
                 print("Erro! Tente novamente")
+                continue
 
 
 def gerenciarUsuarios():
@@ -151,32 +113,19 @@ def gerenciarUsuarios():
     return
 
 
-def estoque():
-    print("\nEstoque aqui!\n")
-    home()
-    return
-
-def compras():
-    print("\nCompras aqui!\n")
-    home()
-    return
-
 def descarte():
     print("\nDescarte aqui!\n")
     home()
     return
 
+
 def sair():
     print("\nEncerrando Programa...\n")
     
-    cursor.close
-    
-    conn.close
-    
+    cursor.close()
+    conn.close()
     import sys
     sys.exit()
-
-
 
 
 if __name__ == "__main__":

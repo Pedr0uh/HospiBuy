@@ -88,7 +88,7 @@ def mostrar_estatisticas():
     print(f"Total de compras registradas: {total_compras}")
     print(f"Valor total gasto: R$ {total_gasto:.2f}")
 
-def main():
+def menu():
     while True:
         mostrar_menu()
         escolha = input("Escolha uma opção: ").strip()
@@ -107,5 +107,4 @@ def main():
         else:
             print("Opção inválida. Tente novamente.")
 
-if __name__ == "__main__":
-    main()
+
