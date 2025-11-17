@@ -1,12 +1,12 @@
 import mysql.connector
 
 conn = mysql.connector.connect(
-    host="shinkansen.proxy.rlwy.net", # temos que aprender como esconder host e senha
-    user="root",
-    password="eSGzRtPwShQdjLoqAqsjUCpAIzHqPLRX",
-    database="HospiBuy",
-    port="18428"
+    host="", # temos que aprender como esconder host e senha
+    user="",
+    password="",
+    database="",
+    port=,
+    ssl_ca="/etc/ssl/certs/ca-certificates.crt"
 )
 
 cursor = conn.cursor(dictionary=True)
-
