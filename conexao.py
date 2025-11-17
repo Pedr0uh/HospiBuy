@@ -1,12 +1,17 @@
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+#carrega o arquivo .env
+load_dotenv()
 
 conn = mysql.connector.connect(
-    host="", # temos que aprender como esconder host e senha
-    user="",
-    password="",
-    database="",
-    port=,
-    ssl_ca="/etc/ssl/certs/ca-certificates.crt"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
+    port=int(os.getenv("DB_PORT")),
+    ssl_disabled=True
 )
 
 cursor = conn.cursor(dictionary=True)
