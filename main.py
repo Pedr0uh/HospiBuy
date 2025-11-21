@@ -66,7 +66,7 @@ def home():
     global nome_usuario, cargo    
 
     while True:
-        print(f"\nBem vindo {nome_usuario}! Cargo: {cargo}\n")
+        print(f"\nBem vindo {nome_usuario}! \nCargo: {cargo}\n")
 
         print(r"""
 -- O que deseja fazer hoje? -- 
