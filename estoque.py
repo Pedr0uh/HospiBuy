@@ -1,3 +1,4 @@
+from conexao import cursor
 
 def erro():
     
@@ -24,17 +25,73 @@ def estoque():
    
         if opcao == 1:
             print(
+'''\n--- Como deseja procurar ? ---
+1.Por sku
+2.Por nome
+3.Por tipo
+4.local
+5.Voltar para o menu'''
+                )
+            subopcao = int(input('\nSelecione uma opção: '))
 
-                
-            )
+            match subopcao:
+                case 1:
+                    sku = (input('\nDigite o sku do item: '))
 
-            ide = int(input('Digite o sku do item :'))
-            nome1 = str(input('Digite o nome do item :'))
-            tipo1 = str(input('Digite o tipo :'))
-            quantidade1 = int(input('Digite  a quantidade :'))
-            local1 = str(input('Digite o local :'))
+                    query = "SELECT * FROM produto WHERE sku = %s"
+                    valores = (sku, )
+
+                    cursor.execute(query, valores)
+
+                    resultado = cursor.fetchone()
+
+                    if resultado:
+                        print("\nItem encontrado:\n")
+                        print(f"SKU: {resultado['sku']} | "
+                        f"Nome: {resultado['descricao']} | "
+                        f"Tipo: {resultado['tipo']} | "
+                        f"Local: {resultado['localizacao']} | "
+                        f"Quantidade: {resultado['quantidade']} | "
+                        f"lote: {resultado['lote']}\n"
+                        )
+                    else:
+                        print("\nItem não encontrado no estoque.\n")
+
+                case 2:
+                    descricao = str(input('Digite a descricao do item: '))
+
+                    query = "SELECT * FROM produto WHERE descricao = %s"
+                    valores = (f"%{descricao}%", )
+
+                    cursor.execute(query, valores)
+
+                    resultado = cursor.fetchall()
+
+                    if resultado:
+                        for item in resultado:
+                            print("\nItem encontrado:\n")
+                            print(f"SKU: {item['sku']} | "
+                            f"Nome: {item['descricao']} | "
+                            f"Tipo: {item['tipo']} | "
+                            f"Local: {item['localizacao']} | "
+                            f"Quantidade: {item['quantidade']} | "
+                            f"lote: {item['lote']}\n"
+                            )
+                    else:
+                        print("\nItem não encontrado no estoque.\n")
+
+                case 3:
+                     tipo1 = str(input('Digite o tipo :'))
+                case 4:
+                    local1 = str(input('Digite o local :'))
+                case 5:
+                    print("Voltando para o menu...")
+                    i = 1
+                    return
+                case _:
+                    print ('\nOpção nao encontrada!')
+                    contador += 1
             
-    
         elif opcao == 2:
             nome3 = str(input('Escreva o nome do item/cod que deseja remover :'))
             
