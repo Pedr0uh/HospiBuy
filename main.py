@@ -6,6 +6,7 @@ import estoque, compras
 
 nome_usuario = None
 cargo = None
+cnes = None
 
 def main():
 
@@ -40,9 +41,10 @@ def inicio():
             case "1": # caso a variavel seja 1
                 usuario = fazerLogin()  
                 if usuario:
-                    global nome_usuario, cargo
+                    global nome_usuario, cargo, cnes
                     nome_usuario = usuario["nome"]
                     cargo = usuario["cargo"]
+                    cnes = usuario["cnes"]
                     home()
                 else:
                     print("falha no login ou cancelado")
@@ -66,10 +68,9 @@ def home():
     global nome_usuario, cargo    
 
     while True:
-        print(f"\nBem vindo {nome_usuario}! \nCargo: {cargo}\n")
+        print(f"\nBem vindo {nome_usuario}! \nCargo: {cargo} \ncnes: {cnes}\n")
 
-        print(r"""
--- O que deseja fazer hoje? -- 
+        print(r"""-- O que deseja fazer hoje? -- 
 
     1 - Gerenciar Estoque    
     2 - Comprar Itens

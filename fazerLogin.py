@@ -14,14 +14,14 @@ def fazerLogin():
         entradaLogin = input("Digite seu CPF: ")
         entradaSenha = input("Digite sua senha: ")
 
-        query = "SELECT nome, cargo FROM usuario WHERE cpf = %s AND senha = %s"
+        query = "SELECT nome, cargo, cnes FROM usuario WHERE cpf = %s AND senha = %s"
         valores = entradaLogin, entradaSenha
         
         cursor.execute(query, valores)
         resultado = cursor.fetchone()
 
         if resultado:
-            return {"nome": resultado['nome'], "cargo": resultado['cargo']} 
+            return {"nome": resultado['nome'], "cargo": resultado['cargo'], "cnes": resultado['cnes']} 
         
         else:
             tentativa += 1
