@@ -88,7 +88,7 @@ def home():
 
         match opcao:
             case "1":
-                estoque.estoque()
+                estoque.estoque(cnes)
                 continue
             case "2":
                 compras.menu()
