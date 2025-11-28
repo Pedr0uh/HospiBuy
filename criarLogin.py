@@ -86,7 +86,7 @@ Número digitado incorreto, tente novamente:
     
     print("\nSalvando informações...")
     
-    time.sleep(3)
+    time.sleep(15)
     
     return True
         

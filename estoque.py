@@ -95,7 +95,7 @@ def estoque(cnes):
                     cursor.execute(delete_query, delete_valores)
                     conn.commit()
 
-                    time.sleep()
+                    time.sleep(15)
 
                     print("""\n
 -------------------------------  
