@@ -2,6 +2,7 @@ from conexao import conn, cursor
 import time
 from fazerLogin import fazerLogin
 from criarLogin import criarLogin
+from gerenciarUsuarios import gerenciarUsuarios
 import estoque, compras
 
 nome_usuario = None
