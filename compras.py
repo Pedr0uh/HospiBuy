@@ -1,4 +1,7 @@
 import datetime
+from random import random
+from conexao import cursor, conn
+import time
 
 compras = []
 contador_id = 1
@@ -8,7 +11,7 @@ def mostrar_menu():
     print("1. Registrar nova compra")
     print("2. Listar todas as compras")
     print("3. Buscar compras por fornecedor")
-    print("4. Mostrar todos os criterios")
+    print("4. Ver itens com menos estoque")
     print("5. Sair")
     
 
@@ -77,17 +80,73 @@ def buscar_por_fornecedor():
         print(f"Valor Total: R$ {valor_total:.2f}")
         print(f"Data: {c['data']}")
 
-def mostrar_estatisticas():
-    print("\n--- Estatísticas de Compras ---")
-    if not compras:
-        print("Nenhuma compra registrada.")
-        return
+def menosEstoque():
+    print("\n--- Produtos com menos estoque ---")
+    
+    query = 'SELECT * FROM produto ORDER BY quantidade ASC'
+    
+    cursor.execute(query)
+    resultado1 = cursor.fetchall()
+    
+    if resultado1:
+        print("Produtos com menos estoque:")
+        for item in resultado1:
+            print("---------------------------------------------------------------------------------------------------------------------")
+            print(f"SKU: {item['sku']} | "
+            f"Descricao: {item['descricao']} | "
+            f"Tipo: {item['tipo']} | "
+            f"Local: {item['localizacao']} | "
+            f"Quantidade: {item['quantidade']} | "
+            f"lote: {item['lote']}")
+            print("---------------------------------------------------------------------------------------------------------------------")
+    else:
+        print("Nenhum produto encontrado no estoque.")
 
-    total_compras = len(compras)
-    total_gasto = sum(c['quantidade'] * c['valor_unitario'] for c in compras)
+    subopcao = input("Deseja solicitar compra para algum desses itens? (s/n): ").strip().lower()
 
-    print(f"Total de compras registradas: {total_compras}")
-    print(f"Valor total gasto: R$ {total_gasto:.2f}")
+    if subopcao == 's':
+        sku = input("Digite o SKU do produto: ").strip()
+        print("-- Fornecedores --")
+        for i in range(15):
+            preco = random.uniform(6, 14)
+            preco[i+1] = preco
+
+            print('--------------------------------')
+            print(f"{i+1} - Fornecedor {i+1}")
+            print(f"preço unitário: R$ {preco:.2f}")
+            print('--------------------------------')
+
+        fornecedor_escolhido = int(input("Escolha o número do fornecedor: ").strip())
+        preco_escolhido = preco[fornecedor_escolhido]
+        quantidade_solicitada = input("Digite a quantidade a ser comprada do item: ").strip()
+        local_item = input("Digite o local que o item será armazenado: ").strip()    
+
+        soma = quantidade_solicitada * preco_escolhido
+
+        print("-- Resumo da Compra --")
+        print(f"SKU do Produto: {sku}")
+        print(f"Fornecedor: Fornecedor {fornecedor_escolhido}")
+        print(f"Quantidade: {quantidade_solicitada}")
+        print(f"Preço Unitário: R$ {preco_escolhido:.2f}")
+        print(f"Valor Total da Compra: R$ {soma:.2f}")
+
+        confirmar = input("Confirmar compra? (s/n): ").strip().lower()
+        if confirmar == 's':
+            
+            query = 'UPDATE produto SET sku = %s, descricao = %s, quantidade = %s, tipo = %s, data_compra = %s, lote = %s, validade = %s, localizacao = %s, ID_fornecedor = %s WHERE sku = %s'
+            valores = (item['sku'], item['descricao'], item['quantidade'] + int(quantidade_solicitada), item['tipo'], datetime.datetime.now().strftime("%Y-%m-%d"), item['lote'], item['validade'], local_item, fornecedor_escolhido, sku)
+
+            cursor.execute(query, valores)
+            conn.commit()
+
+            print("Salvando...")
+
+            time.sleep(15)
+
+            print("Compra registrada com sucesso!")
+        else:
+            print("Compra cancelada.")
+          # Exemplo de limite baixo de estoque
 
 def menu():
     while True:
@@ -101,7 +160,7 @@ def menu():
         elif escolha == '3':
             buscar_por_fornecedor()
         elif escolha == '4':
-            mostrar_estatisticas()
+            menosEstoque()
         elif escolha == '5':
             print("Saindo... Obrigado!")
             break
