@@ -8,7 +8,7 @@ def mostrar_menu():
     print("1. Registrar nova compra")
     print("2. Listar todas as compras")
     print("3. Buscar compras por fornecedor")
-    print("4. Mostrar estatísticas")
+    print("4. Mostrar todos os criterios")
     print("5. Sair")
     
 

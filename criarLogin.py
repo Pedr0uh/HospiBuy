@@ -1,5 +1,5 @@
 from conexao import conn, cursor
-from utils import pedir_input 
+from utils.pedir_input import pedir_input
 import time
 
 def criarLogin():
@@ -8,7 +8,7 @@ def criarLogin():
     if cnes is None:
         return
     
-    queryVerific = "SELECT * FROM hospitais WHERE CNES = %s"
+    queryVerific = "SELECT * FROM Hospitais WHERE CNES = %s"
     cursor.execute(queryVerific, (cnes,))
     
     resultado = cursor.fetchone()
@@ -19,32 +19,36 @@ def criarLogin():
         return False
     
 
-    cnpj = pedir_input("Insira o CNPJ do Hospital (sem caracteres) Ou digite 0 para voltar para o menu: : ")
+    cnpj = pedir_input("Insira o CNPJ do Hospital (sem caracteres) Ou digite 0 para voltar para o menu: ")
     if cnpj is None:
         return False
     
-    nomeHospital = pedir_input("Insira o nome do Hospital Ou digite 0 para voltar para o menu: : ")
+    nomeHospital = pedir_input("Insira o nome do Hospital Ou digite 0 para voltar para o menu: ")
     if nomeHospital is None:
         return False
     
-    telefone = pedir_input("Insira um telefone de contato Ou digite 0 para voltar para o menu: : ")
+    telefone = pedir_input("Insira um telefone de contato Ou digite 0 para voltar para o menu: ")
     if telefone is None:
         return False
     
-    email = pedir_input("Insira um email principal Ou digite 0 para voltar para o menu: : ")
+    email = pedir_input("Insira um email principal Ou digite 0 para voltar para o menu: ")
     if email is None:
         return False
     
-    cpfADM = pedir_input("Insira o CPF do administrador Ou digite 0 para voltar para o menu: : ")
+    cpfADM = pedir_input("Insira o CPF do administrador Ou digite 0 para voltar para o menu: ")
     if cpfADM is None:
         return False
     
-    nomeADM = pedir_input("Insira o nome do administrador Ou digite 0 para voltar para o menu: : ")
+    nomeADM = pedir_input("Insira o nome do administrador Ou digite 0 para voltar para o menu: ")
     if nomeADM is None:
         return False
     
-    senha = pedir_input("Crie uma senha para o login do adminstrador Ou digite 0 para voltar para o menu: : ")
+    senha = pedir_input("Crie uma senha para o login do adminstrador Ou digite 0 para voltar para o menu: ")
     if senha is None:
+        return False
+    
+    ende = pedir_input("Insira o endereço do adminstrador do login Ou digite 0 para voltar o menu: ")
+    if ende is None:
         return False
     
     plano = pedir_input("""
@@ -72,11 +76,11 @@ Número digitado incorreto, tente novamente:
         
         plano = input("Escolha a opção: ")
 
-    query = "INSERT INTO hospitais (CNES, CNPJ, nome, telefone, email, cpfADM, nomeADM, senha, plano) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    valores = cnes, cnpj, nomeHospital, telefone, email, cpfADM, nomeADM, senha, plano
+    query = "INSERT INTO Hospitais (cnes, cnpj, nome, telefone, email, cpfADM, nomeADM, plano) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    valores = cnes, cnpj, nomeHospital, telefone, email, cpfADM, nomeADM, plano
     
-    queryLogin = "INSERT INTO usuarios (CPF, nome, senha, cargo) VALUES(%s, %s, %s, 'ADM')"
-    valoresLogin = cpfADM, nomeADM, senha
+    queryLogin = "INSERT INTO usuario (nome, email, cnes, cpf, cargo, endereco, senha) VALUES(%s, %s, %s, %s, 'ADM', %s, %s)"
+    valoresLogin = nomeADM, email, cnes, cpfADM, ende, senha
 
     cursor.execute(query, valores)
     

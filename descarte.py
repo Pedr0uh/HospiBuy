@@ -1,5 +1,5 @@
 
-    def descarte():
+def descarte():
     while True:
         print("""
 Selecione o tipo de descarte:

@@ -108,11 +108,6 @@ def home():
                 continue
 
 
-def gerenciarUsuarios():
-    print("\nGerenciamento de Usuários aqui!\n")
-    home()
-    return
-
 
 def descarte():
     print("\nDescarte aqui!\n")
