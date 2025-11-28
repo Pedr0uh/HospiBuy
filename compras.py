@@ -10,6 +10,7 @@ def mostrar_menu():
     print("3. Buscar compras por fornecedor")
     print("4. Mostrar estatísticas")
     print("5. Sair")
+    
 
 def registrar_compra():
     global contador_id
