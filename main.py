@@ -12,8 +12,6 @@ cnes = None
 def main():
 
     print("\nConectando com o Banco...")
-    
-    time.sleep(2)
 
     if conn.is_connected():
         print("\nConectado com o banco com sucesso!")
@@ -98,7 +96,7 @@ def home():
                 descarte()
                 continue
             case "4":
-                gerenciarUsuarios()
+                gerenciarUsuarios(cnes)
                 continue
             case "5":
                 sair()
